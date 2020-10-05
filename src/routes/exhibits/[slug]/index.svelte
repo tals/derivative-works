@@ -11,7 +11,7 @@
 
   const sample: dt.Collage = {
     name: "seed 3",
-    path: "foo2",
+    path: "first",
     final_image: "canvas/canvas_step_0699.png",
     palette: paletteRange(32),
   };
