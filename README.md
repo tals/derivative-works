@@ -20,7 +20,9 @@ $ cd /home/tal/dev/abstract-portraits/results
 $ http-server -p 3003 --cors -a
 ```
 
-# Preparing for serving
+# Preparing for "prod" (github pages etc)
+See https://sapper.svelte.dev/docs#Exporting
+
 Still needs a few more steps, but roughly:
 
 ```bash
