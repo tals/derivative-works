@@ -57,5 +57,5 @@
 		     the blog data when we hover over the link or tap it on a touchscreen -->
 		<!-- <li><a rel=prefetch aria-current="{segment === 'blog' ? 'page' : undefined}" href="blog">blog</a></li>
 	</ul> -->
-	<div class="text-4xl p-2 font-normal select-none">Deriative Work</div>
+	<div class="text-4xl p-2 font-normal select-none">Derivative Work</div>
 </nav>
