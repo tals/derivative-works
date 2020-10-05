@@ -8,11 +8,18 @@ import {Collage} from "./dataTypes";
 
 
 export const EXHIBITS: Record<string, Collage> = {
-  "seed_3": {
-    name: "seed 3",
-    path: "first",
-    final_image: "canvas/canvas_step_0699.png",
+  "first": {
+    name: "first thing",
+    path: "2020-10-05-08-29-30-28676",
+    final_image: "canvas/0699.png",
+    palette: paletteRange(32),
+  },
+  "second": {
+    name: "sideways dude",
+    path: "2020-10-05-08-37-36-96436",
+    final_image: "canvas/0699.png",
     palette: paletteRange(32),
   }
+
 };
 

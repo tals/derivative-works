@@ -18,7 +18,7 @@
 
 <script lang="ts">
   import {CDN_ROOT} from "../../../config"
-  import {getFinalImage} from "../../../utils"
+  import {getFinalImage, getPaletteUrl} from "../../../utils"
   import range from "lodash/range";
   import { fromPairs } from "lodash";
 
@@ -48,7 +48,7 @@
     <div class="flex flex-wrap  justify-center">
       {#each exhibit.palette as p, i}
         <img
-          src="{CDN_ROOT}/{exhibit.path}/palette/palette_{i.toString().padStart(4, '0')}.png"
+          src={getPaletteUrl(exhibit, i)}
           class="h-32 w-32 p-2 hover:scale-150 transition-transform transform duration-75 hover:z-10" />
       {/each}
     </div>
