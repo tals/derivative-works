@@ -12,7 +12,13 @@ $ npm tailwind:dev
 $ npm run dev
 ```
 
-Open up [localhost:3000](http://localhost:3000)
+## Data serving
+I'm running this off the directory I save the runs for.
+There's an instance running in the background on morphogen
+```bash
+$ cd /home/tal/dev/abstract-portraits/results
+$ http-server -p 3003 --cors -a
+```
 
 # Preparing for serving
 Still needs a few more steps, but roughly:
