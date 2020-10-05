@@ -9,10 +9,22 @@
 </script>
 
 <script lang="ts">
-  import {getFinalImage, getPaletteUrl} from "../../../utils"
+  import {getFinalImage, getPaletteUrl} from "../../../url_utils"
   import * as dt from "../../../dataTypes";
-
   export let exhibit: dt.Collage;
+
+  async function loadLUT() {
+  }
+
+  let lutCanvas: HTMLCanvasElement;
+  $: lutCtx = lutCanvas && lutCanvas.getContext('2d');
+  $: if (lutCtx) {
+    loadLUT();
+  }
+
+
+
+
 </script>
 
 <style>
@@ -31,6 +43,7 @@
 </style>
 
 <div class="text-white">
+  <canvas bind:this={lutCanvas} width={512} height={512} hidden />
   <div class="flex flex-col items-center">
     <div class="font-medium italic text-4xl font-serif">"{exhibit.name}"</div>
     <img class="m-4 sm:h-72 md:h-96 lg:h-auto rounded" src={getFinalImage(exhibit)} />

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { EXHIBITS } from "../../data";
-  import { getFinalImage } from "../../utils";
+  import { getFinalImage } from "../../url_utils";
 </script>
 
 <div class="flex text-white justify-center">

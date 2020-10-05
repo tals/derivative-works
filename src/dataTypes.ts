@@ -5,6 +5,6 @@ export interface Palette {
 export interface Collage {
   name: string;
   path: string;
-  final_image: string;
+  steps: number;
   palette: Palette[];
 }

@@ -9,15 +9,15 @@ import {Collage} from "./dataTypes";
 
 export const EXHIBITS: Record<string, Collage> = {
   "first": {
-    name: "first thing",
-    path: "2020-10-05-08-29-30-28676",
-    final_image: "canvas/0699.png",
+    name: "sideways dude",
+    path: "2020-10-05-08-55-31-57665",
+    steps: 700,
     palette: paletteRange(32),
   },
   "second": {
-    name: "sideways dude",
-    path: "2020-10-05-08-37-36-96436",
-    final_image: "canvas/0699.png",
+    name: "Second",
+    path: "2020-10-05-08-59-57-16078",
+    steps: 700,
     palette: paletteRange(32),
   }
 
