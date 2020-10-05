@@ -26,6 +26,6 @@ See https://sapper.svelte.dev/docs#Exporting
 Still needs a few more steps, but roughly:
 
 ```bash
-$ npm tailwind:prod
+$ npm run tailwind:prod
 $ npm run export
 ```
