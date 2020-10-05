@@ -1,28 +1,18 @@
 <script context="module" lang="ts">
   import {EXHIBITS} from "../../../data";
 	export async function preload({ params }) {
-		// the `slug` parameter is available because
-		// this file is called [slug].svelte
-		// const res = await this.fetch(`blog/${params.id}.json`);
-		// const data = await res.json();
-
-		// if (res.status === 200) {
-		// 	return { post: data };
-		// } else {
-		// 	this.error(res.status, data.message);
-    // }
-    console.log("params are", params)
+    if (!EXHIBITS[params.slug]) {
+      this.error(404, "Not found");
+    }
     return {exhibit: EXHIBITS[params.slug] }
 	}
 </script>
 
 <script lang="ts">
-  import {CDN_ROOT} from "../../../config"
   import {getFinalImage, getPaletteUrl} from "../../../utils"
-  import range from "lodash/range";
-  import { fromPairs } from "lodash";
+  import * as dt from "../../../dataTypes";
 
-  export let exhibit: any;
+  export let exhibit: dt.Collage;
 </script>
 
 <style>

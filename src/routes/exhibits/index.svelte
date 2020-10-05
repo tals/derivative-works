@@ -3,7 +3,6 @@
   import { getFinalImage } from "../../utils";
 </script>
 
-<div>YO</div>
 <div class="flex text-white justify-center">
   {#each Object.entries(EXHIBITS) as [id, exhibit]}
     <!-- we're using the non-standard `rel=prefetch` attribute to
