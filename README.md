@@ -4,7 +4,7 @@ All assets are served from morphogen-1, via a webserver on port 3003 (see config
 ## Install requirements
 ```bash
 $ npm install
-$ npm tailwind:dev
+$ npm run tailwind:dev
 ```
 
 ## Running
