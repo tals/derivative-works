@@ -48,13 +48,14 @@
 	}
 </style>
 
-<nav class="bg-white text-black">
-	<ul>
-		<li><a aria-current="{segment === undefined ? 'page' : undefined}" href=".">home</a></li>
+<nav class="bg-white text-black fixed w-full">
+	<!-- <ul>
+		<li><a aria-current="{segment === undefined ? 'exhibits' : undefined}" href=".">exhibits</a></li>
 		<li><a aria-current="{segment === 'about' ? 'page' : undefined}" href="about">about</a></li>
-
+ -->
 		<!-- for the blog link, we're using rel=prefetch so that Sapper prefetches
 		     the blog data when we hover over the link or tap it on a touchscreen -->
-		<li><a rel=prefetch aria-current="{segment === 'blog' ? 'page' : undefined}" href="blog">blog</a></li>
-	</ul>
+		<!-- <li><a rel=prefetch aria-current="{segment === 'blog' ? 'page' : undefined}" href="blog">blog</a></li>
+	</ul> -->
+	<div class="text-4xl p-2 font-normal select-none">Deriative Work</div>
 </nav>

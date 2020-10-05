@@ -8,8 +8,8 @@
     "export": "sapper export --legacy",
     "start": "node __sapper__/build",
     "validate": "svelte-check --ignore src/node_modules/@sapper",
-    "tailwind:dev": "tailwindcss build tailwind.pcss -o public/sm-base.css",
-    "tailwind:prod": "postcss public/sm-base.css -o public/sm-base.css"
+    "tailwind:dev": "tailwindcss build tailwind.pcss -o static/sm-base.css",
+    "tailwind:prod": "postcss static/sm-base.css -o static/sm-base.css"
   },
   "dependencies": {
     "compression": "^1.7.1",

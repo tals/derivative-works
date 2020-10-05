@@ -9,7 +9,10 @@ module.exports = {
       }
     }
   },
-   variants: {},
+   variants: {
+    zIndex: ['hover'],
+
+   },
   plugins: [],
   future: {
     removeDeprecatedGapUtilities: true,
