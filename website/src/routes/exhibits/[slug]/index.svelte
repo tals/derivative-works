@@ -14,7 +14,6 @@
   import * as dt from "../../../dataTypes";
   import clamp from "lodash/clamp";
   import ImageData from "../../../components/ImageData.svelte";
-  import Masks from "../../../components/Masks.svelte";
   export let exhibit: dt.Collage;
 
   let currentPiece = -1;

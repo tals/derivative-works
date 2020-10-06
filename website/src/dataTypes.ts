@@ -5,6 +5,6 @@ export interface Palette {
 export interface Collage {
   name: string;
   path: string;
-  steps: number;
+  key: string; // damnt joel
   palette: Palette[];
 }

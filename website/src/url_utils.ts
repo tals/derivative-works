@@ -9,17 +9,17 @@ export function getPaletteUrl(collage: Collage, palette: number) {
 }
 
 export function getFinalImage(collage: Collage) {
-  return `${CDN_ROOT}/${collage.path}/canvas/${pad(collage.steps, 4)}.png`;
+  return `${CDN_ROOT}/${collage.path}/${collage.key}.jpg`;
 }
 
 export function getMaskCanvasSpace(collage: Collage, piece: number) {
-  return `${CDN_ROOT}/${collage.path}/final_masks/${pad(piece, 4)}_trans.png`
+  return `${CDN_ROOT}/${collage.path}/masks/${pad(piece, 4)}_canvas.png`
 }
 
 export function getMaskPieceSpace(collage: Collage, piece: number) {
-  return `${CDN_ROOT}/${collage.path}/final_masks/${pad(piece, 4)}.png`
+  return `${CDN_ROOT}/${collage.path}/masks/${pad(piece, 4)}_palett.png`
 }
 
 export function getLutUrl(collage: Collage) {
-  return `${CDN_ROOT}/${collage.path}/masks/lut_${pad(collage.steps, 4)}.png`;
+  return `${CDN_ROOT}/${collage.path}/lut_${collage.key}.png`;
 }
