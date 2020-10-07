@@ -1,7 +1,8 @@
 <svelte:head>
-	<title>About</title>
+  <title>About</title>
 </svelte:head>
+<div class="p-4">
+  <div class="font-bold text-xl">What is this</div>
+	<div>blabla</div>
 
-<h1>About this site</h1>
-
-<p>This is the 'about' page. There's not much here.</p>
+</div>
