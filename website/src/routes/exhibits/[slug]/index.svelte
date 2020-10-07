@@ -13,6 +13,7 @@
 </script>
 
 <script lang="ts">
+  import { goto } from '@sapper/app';
   import * as urls from "../../../url_utils";
   import * as dt from "../../../dataTypes";
   import clamp from "lodash/clamp";
@@ -55,11 +56,21 @@
   let video: HTMLVideoElement;
   let playVideo = true;
 
+
+
   // reset video when switching exhibits
   $: if (exhibit) {
     playVideo = true;
   }
 
+  function handleKeydown(e: KeyboardEvent) {
+    if (e.key === "ArrowLeft" && prev) {
+      goto(`/exhibits/${prev.key}`)
+    }
+    if (e.key === "ArrowRight" && next) {
+      goto(`/exhibits/${next.key}`)
+    }
+  }
 </script>
 
 <style>
@@ -86,6 +97,7 @@
   }
 </style>
 
+<svelte:window on:keydown={handleKeydown}/>
 <div class="text-white">
   <ImageData
     bind:imageDataCtx={lutCtx}
@@ -105,10 +117,10 @@
     {/if}
     <!-- Main image -->
     <div class="main">
-    <div class="font-medium italic text-4xl font-serif">"{exhibit.name}"</div>
+    <div class="font-medium italic text-4xl font-serif text-center">"{exhibit.name}"</div>
     <div class="relative m-4 h-128 w-128 bg-white">
       {#if playVideo}
-        <video autoplay on:play={() => video.playbackRate = 6} class="absolute" out:fade|local on:ended={() => playVideo = false}  muted={true} bind:this={video} src={urls.getVideoUrl(exhibit)} autoplay={true}/>
+        <video on:play={() => video.playbackRate = 6} class="absolute" out:fade|local on:ended={() => playVideo = false}  muted={true} bind:this={video} src={urls.getVideoUrl(exhibit)} autoplay/>
       {:else}
       <img
         class="rounded h-full"
