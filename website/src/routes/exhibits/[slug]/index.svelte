@@ -1,11 +1,14 @@
 <script context="module" lang="ts">
   import { EXHIBITS } from "../../../data";
   export async function preload({ params }) {
-    const exhibit = EXHIBITS.find(x => x.key === params.slug);
+    const exhibit = EXHIBITS.find((x) => x.key === params.slug);
     if (!exhibit) {
       this.error(404, "Not found");
     }
-    return { exhibit };
+    const idx = EXHIBITS.indexOf(exhibit);
+    const prev = idx - 1 >= 0 ? EXHIBITS[idx - 1] : null;
+    const next = idx + 1 < EXHIBITS.length ? EXHIBITS[idx + 1] : null;
+    return { exhibit, next, prev };
   }
 </script>
 
@@ -14,18 +17,22 @@
   import * as dt from "../../../dataTypes";
   import clamp from "lodash/clamp";
   import ImageData from "../../../components/ImageData.svelte";
-  import { fade } from "svelte/transition"
-import { onMount } from "svelte";
+  import { fade } from "svelte/transition";
+
   export let exhibit: dt.Collage;
+  export let prev: dt.Collage;
+  export let next: dt.Collage;
 
   let currentPiece = -1;
   let currentMask = -1;
   let lutCtx: CanvasRenderingContext2D;
   let lutSize = { width: 0, height: 0 };
+
   function mouseOut() {
     currentMask = -1;
     currentPiece = -1;
   }
+
   function mouseMove(e: MouseEvent) {
     if (!lutCtx) {
       console.log("no ctx");
@@ -46,26 +53,62 @@ import { onMount } from "svelte";
   }
 
   let video: HTMLVideoElement;
-
-  onMount(() => {
-    video.play();
-    video.playbackRate = 6;
-  })
-
   let playVideo = true;
+
+  // reset video when switching exhibits
+  $: if (exhibit) {
+    playVideo = true;
+  }
+
 </script>
 
+<style>
+  .grid-container {
+    display: grid;
+    grid-template-columns: 80px 1fr 80px;
+    grid-template-rows: max-content max-content;
+    gap: 0px 0px;
+    grid-template-areas:
+      "left main right"
+      "left part right";
+  }
+  .left {
+    grid-area: left;
+  }
+  .right {
+    grid-area: right;
+  }
+  .main {
+    grid-area: main;
+  }
+  .part {
+    grid-area: part;
+  }
+</style>
 
 <div class="text-white">
   <ImageData
     bind:imageDataCtx={lutCtx}
     bind:size={lutSize}
     src={urls.getLutUrl(exhibit)} />
-  <div class="flex flex-col items-center">
+  <div class="grid-container items-center items-center justify-items-center">
+    <!-- Nav -->
+    {#if prev}
+      <a
+        class="left material-icons md-48 p-4 opacity-75 duration-300 hover:opacity-100"
+        href="/exhibits/{prev.key}">arrow_back</a>
+    {/if}
+    {#if next}
+      <a
+        class="right material-icons md-48 p-4 opacity-75 duration-300 hover:opacity-100"
+        href="/exhibits/{next.key}">arrow_forward</a>
+    {/if}
+    <!-- Main image -->
+    <div class="main">
     <div class="font-medium italic text-4xl font-serif">"{exhibit.name}"</div>
     <div class="relative m-4 h-128 w-128 bg-white">
       {#if playVideo}
-        <video class="absolute" out:fade on:ended={() => playVideo = false}  muted={true} bind:this={video} src={urls.getVideoUrl(exhibit)} autoplay={true}/>
+        <video autoplay on:play={() => video.playbackRate = 6} class="absolute" out:fade|local on:ended={() => playVideo = false}  muted={true} bind:this={video} src={urls.getVideoUrl(exhibit)} autoplay={true}/>
       {:else}
       <img
         class="rounded h-full"
@@ -76,7 +119,7 @@ import { onMount } from "svelte";
       {#if currentPiece !== -1}
         <img
           in:fade={{duration: 200}}
-          out:fade={{duration: 200}}
+          out:fade|local={{duration: 200}}
           class="rounded absolute inset-0 pointer-events-none"
           style="mix-blend-mode: multiply;"
           src={urls.getMaskCanvasSpace(exhibit, currentMask)}
@@ -84,9 +127,12 @@ import { onMount } from "svelte";
       {/if}
     {/if}
     </div>
-    <h1 class="text-3xl text-white p-4">Source Material</h1>
-    <div class="flex flex-wrap  justify-center">
-      {#each exhibit.palette as p, i}
+  </div>
+    <!-- Source Images -->
+    <div class="part flex flex-col items-center">
+  <h1 class="text-3xl text-white p-4">Source Material</h1>
+  <div class="flex flex-wrap  justify-center">
+    {#each exhibit.palette as p, i}
         <div
           class:border-yellow-300={i === currentPiece}
           class="border-4 border-transparent h-48 w-48 hover:scale-150 transition-all transform duration-100 hover:z-10 rounded relative">
@@ -100,5 +146,6 @@ import { onMount } from "svelte";
         </div>
       {/each}
     </div>
+  </div>
   </div>
 </div>
