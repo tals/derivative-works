@@ -23,3 +23,7 @@ export function getMaskPieceSpace(collage: Collage, piece: number) {
 export function getLutUrl(collage: Collage) {
   return `${CDN_ROOT}/${collage.path}/lut_${collage.key}.png`;
 }
+
+export function getVideoUrl(collage: Collage) {
+  return `${CDN_ROOT}/${collage.path}/${collage.key}.mp4`;
+}

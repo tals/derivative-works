@@ -15,6 +15,7 @@
   import clamp from "lodash/clamp";
   import ImageData from "../../../components/ImageData.svelte";
   import { fade } from "svelte/transition"
+import { onMount } from "svelte";
   export let exhibit: dt.Collage;
 
   let currentPiece = -1;
@@ -43,6 +44,15 @@
     currentMask = idx;
     console.log(`resolved ${x}, ${y} to piece `, currentPiece, currentMask);
   }
+
+  let video: HTMLVideoElement;
+
+  onMount(() => {
+    video.play();
+    video.playbackRate = 6;
+  })
+
+  let playVideo = true;
 </script>
 
 
@@ -53,9 +63,13 @@
     src={urls.getLutUrl(exhibit)} />
   <div class="flex flex-col items-center">
     <div class="font-medium italic text-4xl font-serif">"{exhibit.name}"</div>
-    <div class="relative m-4 xs:h-72 md:h-96 lg:h-128 ">
+    <div class="relative m-4 h-128 w-128 bg-white">
+      {#if playVideo}
+        <video class="absolute" out:fade on:ended={() => playVideo = false}  muted={true} bind:this={video} src={urls.getVideoUrl(exhibit)} autoplay={true}/>
+      {:else}
       <img
         class="rounded h-full"
+        in:fade
         src={urls.getFinalImage(exhibit)}
         on:mousemove={mouseMove}
         on:mouseout={mouseOut} />
@@ -68,6 +82,7 @@
           src={urls.getMaskCanvasSpace(exhibit, currentMask)}
           on:mousemove={mouseMove} />
       {/if}
+    {/if}
     </div>
     <h1 class="text-3xl text-white p-4">Source Material</h1>
     <div class="flex flex-wrap  justify-center">
