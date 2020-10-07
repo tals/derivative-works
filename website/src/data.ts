@@ -7,18 +7,19 @@ import {Collage} from "./dataTypes";
       name: null,
     }));
 
-export const EXHIBITS: Record<string, Collage> = fromPairs([
+
+export const EXHIBITS: Collage[] = [
   {
     name: "IDK",
-    path: "2020-10-06-07-56-uvdsrj",
-    key: "uvdsrj",
-    palette: paletteRange(3),
+    path: "2020-10-06-16-26-osynxk",
+    key: "osynxk",
+    palette: paletteRange(4),
   },
   {
-    name: "IDK",
-    path: "2020-10-06-07-59-loxfpl",
-    key: "loxfpl",
+    name: "some other thing",
+    path: "2020-10-06-22-05-ivkejg",
+    key: "ivkejg",
     palette: paletteRange(3),
-  },
-].map(x => [x.key, x]))
+  }
+];
 
