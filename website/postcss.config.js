@@ -14,6 +14,7 @@ module.exports = {
       content: [
         "src/**/*.svelte",
         "public/*.html",
+        "src/**/*.html",
         "src/**/*.js",
         "src/**/*.ts",
       ],
@@ -35,7 +36,6 @@ module.exports = {
 
           match = regExp.exec(content);
         }
-
         return matchedTokens;
       },
     }),
