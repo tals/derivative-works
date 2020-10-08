@@ -11,15 +11,15 @@ import {Collage} from "./dataTypes";
 export const EXHIBITS: Collage[] = [
   {
     name: "IDK",
-    path: "2020-10-06-16-26-osynxk",
-    key: "osynxk",
-    palette: paletteRange(4),
+    path: "website-dev/2020-10-06-17-42-aqvbwo",
+    key: "aqvbwo",
+    palette: paletteRange(3),
   },
   {
     name: "some other thing",
-    path: "2020-10-06-22-05-ivkejg",
-    key: "ivkejg",
-    palette: paletteRange(3),
+    path: "website-dev/2020-10-06-19-10-burkxl",
+    key: "burkxl",
+    palette: paletteRange(2),
   }
 ];
 
