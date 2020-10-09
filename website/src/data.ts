@@ -1,32 +1,11 @@
-import range from "lodash/range";
-import fromPairs from "lodash/fromPairs";
 import {Collage} from "./dataTypes";
 
-// for when there's no metadata about the palette pieces
-// const paletteRange = (count: number) =>
-//   range(count).map((x) => ({
-//     name: null,
-//   }));
-
-// export const EXHIBITS: Collage[] = [
-//   {
-//     name: "IDK",
-//     path: "website-dev/2020-10-06-17-42-aqvbwo",
-//     key: "aqvbwo",
-//     palette: paletteRange(3),
-//   },
-//   {
-//     name: "some other thing",
-//     path: "website-dev/2020-10-06-19-10-burkxl",
-//     key: "burkxl",
-//     palette: paletteRange(2),
-//   }
-// ];
-
 export const EXHIBITS: Collage[] = [
-  {'key': 'dzdsdu',
-'path': 'batch-1/2020-10-06-08-22-dzdsdu',
-'palette_keys': ['285cf1ce669edeab9041', 'fb6d9b30088fb6a2aedfdbea']},
+  {
+    'key': 'dzdsdu',
+  'path': 'batch-1/2020-10-06-08-22-dzdsdu',
+  'palette_keys': ['285cf1ce669edeab9041', 'fb6d9b30088fb6a2aedfdbea']
+},
 {'key': 'hcadfm',
 'path': 'batch-1/2020-10-06-05-04-hcadfm',
 'palette_keys': ['7c78e087c6fd92a0e884', '285cf1ce669edeab9041']},
@@ -218,8 +197,3 @@ export const EXHIBITS: Collage[] = [
 'path': 'batch-3/2020-10-08-03-47-kugzvx',
 'palette_keys': ['b7c8c68f078bb9053ea0']}
 ]
-
-
-// Collage.forEach(element => {
-//   element.path = ''
-// });

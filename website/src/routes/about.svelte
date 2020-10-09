@@ -7,7 +7,6 @@
   }
 </style>
 <div class="p-4 text-black flex justify-center">
-  <!-- <div class="font-bold text-xl">What is this</div> -->
 	<div class="max-w-3xl">
     <p>
       Derivative-Works is an experiment in using machine learning to create image collages.

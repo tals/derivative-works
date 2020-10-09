@@ -13,7 +13,8 @@ export function getFinalImage(collage: Collage) {
 }
 
 export function getPreviewImage(collage: Collage) {
-  return `${CDN_ROOT}/results/${collage.path}/${collage.key}_small.jpg`;
+  // return `${CDN_ROOT}/results/${collage.path}/${collage.key}_small.jpg`;
+  return `${CDN_ROOT}/results/${collage.path}/${collage.key}_frame0.jpg`;
 }
 
 export function getMaskCanvasSpace(collage: Collage, piece: number) {
