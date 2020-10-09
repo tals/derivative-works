@@ -48,7 +48,7 @@
 
     const rgb = lutCtx.getImageData(x, y, 1, 1);
     const idx = rgb.data[0] - 1;
-    currentPiece = idx % exhibit.palette.length;
+    currentPiece = idx % exhibit.palette_keys.length;
     currentMask = idx;
     console.log(`resolved ${x}, ${y} to piece `, currentPiece, currentMask);
   }
@@ -107,20 +107,20 @@
     <!-- Nav -->
     {#if prev}
       <a
-        class="left material-icons md-48 p-4 opacity-75 duration-300 hover:opacity-100"
+        class="left material-icons md-dark md-48 p-4 opacity-75 duration-300 hover:opacity-100"
         href="/exhibits/{prev.key}">arrow_back</a>
     {/if}
     {#if next}
       <a
-        class="right material-icons md-48 p-4 opacity-75 duration-300 hover:opacity-100"
+        class="right material-icons md-dark md-48 p-4 opacity-75 duration-300 hover:opacity-100"
         href="/exhibits/{next.key}">arrow_forward</a>
     {/if}
     <!-- Main image -->
     <div class="main">
-    <div class="font-medium italic text-4xl font-serif text-center">"{exhibit.name}"</div>
+    <!-- <div class="font-medium italic text-4xl font-serif text-center">"{exhibit.name}"</div> -->
     <div class="relative m-4 h-128 w-128 bg-white">
       {#if playVideo}
-        <video on:play={() => video.playbackRate = 6} class="absolute" out:fade|local on:ended={() => playVideo = false}  muted={true} bind:this={video} src={urls.getVideoUrl(exhibit)} autoplay/>
+        <video on:play={() => video.playbackRate = 1} class="absolute" out:fade|local on:ended={() => playVideo = false}  muted={true} bind:this={video} src={urls.getVideoUrl(exhibit)} autoplay/>
       {:else}
       <img
         class="rounded h-full"
@@ -142,12 +142,14 @@
   </div>
     <!-- Source Images -->
     <div class="part flex flex-col items-center">
-  <h1 class="text-3xl text-white p-4">Source Material</h1>
+  <h1 class="text-2xl text-black p-4">Source Material</h1>
   <div class="flex flex-wrap  justify-center">
-    {#each exhibit.palette as p, i}
-        <div
+    {#each exhibit.palette_keys as p, i}
+        <a
+          href={urls.getArtbreederUrl(p)}
+          target=_blank
           class:border-yellow-300={i === currentPiece}
-          class="border-4 border-transparent h-48 w-48 hover:scale-150 transition-all transform duration-100 hover:z-10 rounded relative">
+          class="border-4 border-transparent h-48 w-48 hover:scale-105 transition-all transform duration-100 hover:z-10 rounded relative">
           <img class="rounded" src={urls.getPaletteUrl(exhibit, i)} />
           {#if i === currentPiece}
             <img
@@ -155,7 +157,7 @@
             style="mix-blend-mode: multiply;"
             src={urls.getMaskPieceSpace(exhibit, currentMask)} />
           {/if}
-        </div>
+        </a>
       {/each}
     </div>
   </div>

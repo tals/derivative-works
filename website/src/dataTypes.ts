@@ -1,10 +1,18 @@
-export interface Palette {
-  name: string | null;
-}
+// export interface Palette {
+//   name: string | null;
+// }
+
+// export interface Collage {
+//   name: string;
+//   path: string;
+//   key: string; // damnt joel
+//   palette: Palette[];
+// }
+
 
 export interface Collage {
-  name: string;
+  key: string;
+  // group: string;
   path: string;
-  key: string; // damnt joel
-  palette: Palette[];
+  palette_keys: string[];
 }

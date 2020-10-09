@@ -5,25 +5,33 @@ function pad(x: number, leading: number) {
   return x.toString().padStart(leading, "0");
 }
 export function getPaletteUrl(collage: Collage, palette: number) {
-  return `${CDN_ROOT}/${collage.path}/palette/${pad(palette, 4)}.jpg`;
+  return `${CDN_ROOT}/results/${collage.path}/palette/${pad(palette, 4)}.jpg`;
 }
 
 export function getFinalImage(collage: Collage) {
-  return `${CDN_ROOT}/${collage.path}/${collage.key}.jpg`;
+  return `${CDN_ROOT}/results/${collage.path}/${collage.key}.jpg`;
+}
+
+export function getPreviewImage(collage: Collage) {
+  return `${CDN_ROOT}/results/${collage.path}/${collage.key}_small.jpg`;
 }
 
 export function getMaskCanvasSpace(collage: Collage, piece: number) {
-  return `${CDN_ROOT}/${collage.path}/masks/${pad(piece, 4)}_canvas.png`
+  return `${CDN_ROOT}/results/${collage.path}/masks/${pad(piece, 4)}_canvas.png`
 }
 
 export function getMaskPieceSpace(collage: Collage, piece: number) {
-  return `${CDN_ROOT}/${collage.path}/masks/${pad(piece, 4)}_palett.png`
+  return `${CDN_ROOT}/results/${collage.path}/masks/${pad(piece, 4)}_palett.png`
 }
 
 export function getLutUrl(collage: Collage) {
-  return `${CDN_ROOT}/${collage.path}/lut_${collage.key}.png`;
+  return `${CDN_ROOT}/results/${collage.path}/lut_${collage.key}.png`;
 }
 
 export function getVideoUrl(collage: Collage) {
-  return `${CDN_ROOT}/${collage.path}/${collage.key}.mp4`;
+  return `${CDN_ROOT}/results/${collage.path}/${collage.key}_fast.mp4`;
+}
+
+export function getArtbreederUrl(palette_key: string) {
+  return `https://artbreeder.com/i?k=${palette_key}`;
 }

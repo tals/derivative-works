@@ -12,7 +12,7 @@
 </style>
 
 <Nav {segment}/>
-<div class="h-24"></div>
+<div class="h-16"></div>
 <main class="" >
 	<slot>
 	</slot>
