@@ -1,0 +1,6 @@
+datasets/
+saved_models/
+saved_videos/
+results/
+__pycache__
+.ipynb_checkpoints/

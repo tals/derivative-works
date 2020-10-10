@@ -25,12 +25,7 @@ class DlibFaceLoss:
         # [0, 1] input range
         self.model.zero_grad()
         img_tensors = F.interpolate(img_tensors, size=(128, 128), mode='bilinear')
-        
-        out = self.dlib_model(img_tensors)
-        # print(out.shape)
-        # size = out.size(2)        
-        # return out[:, 0, size//2, size//2]
-
+                
         out = self.model(img_tensors)
         size = out.size(2)        
         if self.target_activations is not None:
@@ -39,19 +34,16 @@ class DlibFaceLoss:
         else:
             # Take the middle pixel in the image.
             if self.filter_index == 'all':
-                loss = -out[:, :4, size//2, size//2]
+                loss = -out[:, :, size//2, size//2]
             else:
                 loss = -out[:, self.filter_index, size//2, size//2]
-
         return loss
 
-
-from facenet_pytorch import MTCNN, InceptionResnetV1, fixed_image_standardization
-from PIL import Image
 class IdentityLoss:
     def __init__(self, target, image_size=256, margin=86):
         """ Target is a path to an image or directory of images.
         """
+        from facenet_pytorch import MTCNN, InceptionResnetV1, fixed_image_standardization
         self.mtcnn = MTCNN(image_size=image_size, margin=margin)
         self.facenet = InceptionResnetV1(pretrained='vggface2').eval().cuda()
 
@@ -62,7 +54,6 @@ class IdentityLoss:
             paths = [ os.path.join(target, n) for n in os.listdir(target) ]
         else:
             paths = [target]
-
         for name in paths:
             try:
                 img = Image.open(name).convert('RGB')
@@ -91,20 +82,15 @@ class IdentityLoss:
         distances = (img_embs - self.target_emb).norm(dim=1)
         return distances
 
-class DiscriminatorLoss:
-    def __init__(self):
-        sys.path.append('/home/joel/Repos/stylegan2-pytorch')
-        from model import Discriminator
-        self.disc = Discriminator(256).eval().cuda()
-        checkpoint = torch.load('/home/joel/Repos/stylegan2-pytorch/550000.pt')
-        self.disc.load_state_dict(checkpoint['d'], strict=False)
-        # self.transform = transforms.Compose([
-        #     transforms.ToTensor(),
-        #     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5), inplace=False)
-        # ])
-    def __call__(self, img_tensors):
-        # [-1, 1] image range
-        img_tensors = F.interpolate(img_tensors, size=(256, 256), mode='bilinear')
-        # print(img_tensors.shape)
-        scores = self.disc(img_tensors.cuda())
-        return scores
+# class DiscriminatorLoss:
+#     def __init__(self):
+#         sys.path.append('/home/joel/Repos/stylegan2-pytorch')
+#         from model import Discriminator
+#         self.disc = Discriminator(256).eval().cuda()
+#         checkpoint = torch.load('/home/joel/Repos/stylegan2-pytorch/550000.pt')
+#         self.disc.load_state_dict(checkpoint['d'], strict=False)
+#     def __call__(self, img_tensors):
+#         # [-1, 1] image range
+#         img_tensors = F.interpolate(img_tensors, size=(256, 256), mode='bilinear')
+#         scores = self.disc(img_tensors.cuda())
+#         return scores

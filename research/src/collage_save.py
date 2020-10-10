@@ -1,5 +1,5 @@
 import torch
-import random, string
+import random, string, json
 from pathlib import Path
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor, wait, as_completed
@@ -20,7 +20,7 @@ class CollageSaver:
         self.key = ''.join([random.choice(string.ascii_lowercase) for i in range(6)])
         prefix = datetime.utcnow().strftime("%Y-%m-%d-%H-%M") + f"-{self.key}"
         self.path = Path(f"./results/{prefix}")
-        self.path.mkdir(exist_ok=True, parents=True)
+        self.path.mkdir(exist_ok=False, parents=True)
         
         self.palette_dir = self.path / "palette"
         self.palette_dir.mkdir(exist_ok=True)
@@ -30,6 +30,9 @@ class CollageSaver:
         
         # self.canvas_dir = self.path / "canvas"
         # self.canvas_dir.mkdir(exist_ok=True)
+
+        # self.transform_dir = self.path / "transform"
+        # self.transform_dir.mkdir(exist_ok=True)
         
         self.futures = set()
         self.executor = ThreadPoolExecutor(16)
@@ -39,15 +42,23 @@ class CollageSaver:
         f = self.executor.submit(f, *args)
         self.futures.add(f)
         f.add_done_callback(self.futures.remove)
-        
+
     def save_palette(self, palette_imgs: torch.Tensor):
         imgs = convert_to_images(palette_imgs.cpu())
         for i,x in enumerate(imgs):
-            # x.save(self.palette_dir / f"palette_{i:04}.png")
-            # x.save(self.palette_dir / f"palette_{i:04}.jpg")
-            # self.run_async(x.save, self.palette_dir / f"{i:04}.png")
             self.run_async(x.save, self.palette_dir / f"{i:04}.jpg")
-        
+    
+    def save(self, img, data, final=False):
+        lut, masks, masks_pre, masks_post, angle, scale, translation, ordering = data
+        if final:
+            self.save_canvas_final(img)
+            self.save_lookup_table_final(lut)
+            self.save_masks_final(masks_pre, masks_post)
+            self.save_transforms_final(angle, scale, translation)
+            with open(self.path / 'ordering.json', 'w') as outfile:
+                ordering = ordering.detach().cpu().numpy().tolist()
+                json.dump(ordering, outfile)
+
     def save_canvas_final(self, canvas: torch.Tensor):
         canvas = convert_to_images(canvas.detach().cpu())[0]
         self.run_async(canvas.save, self.path / f"{self.key}.jpg")
@@ -56,43 +67,21 @@ class CollageSaver:
         x = Image.fromarray(img.cpu().numpy(), "L")
         self.run_async(x.save, self.path / f"lut_{self.key}.png")
     
-    def save_masks_final(self, masks, masks_palette):
-        masks = masks_to_pil(masks.detach())
+    def save_masks_final(self, masks_palette, masks_canvas):
+        masks_canvas = masks_to_pil(masks_canvas.detach())
         masks_palette = masks_to_pil(masks_palette.detach())
-        # mask_dir = self.path / f"final_masks"
-        # mask_dir.mkdir(exist_ok=True, parents=True)
-        for i, (m1, m2) in enumerate(zip(masks, masks_palette)):
-            self.run_async(m1.save, self.masks_dir / f"{i:04}.png")
-            self.run_async(m2.save, self.masks_dir / f"{i:04}_trans.png")
-    
-    def save_canvas(self, step: int, canvas: torch.Tensor):
-        canvas = convert_to_images(canvas.detach().cpu())[0]
-        self.run_async(canvas.save, self.canvas_dir / f"{step:04}.jpg")
-
-    def save_lookup_table(self, step: int, img: torch.Tensor):
-        x = Image.fromarray(img.cpu().numpy(), "L")
-        self.run_async(x.save, self.masks_dir / f"lut_{step:04}.png")
-
-    def save_masks(self,
-                  step: int,
-                  masks: torch.Tensor,
-                  canvas_masks: torch.Tensor,
-                #   transforms: torch.Tensor
-                 ):
-        step_img_mask_dir = self.masks_dir / f"img_mask_{step:04}"
-        step_img_mask_dir.mkdir(exist_ok=True, parents=True)
-        masks = masks_to_pil(masks.detach())
-        for i, x in enumerate(masks):
-            self.run_async(x.save, step_img_mask_dir / f"{i:02}.png")
         
-        step_canvas_mask_dir = self.masks_dir / f"canvas_mask_{step:04}"
-        step_canvas_mask_dir.mkdir(exist_ok=True, parents=True)
-        canvas_masks = masks_to_pil(canvas_masks.detach())
-        for i, x in enumerate(canvas_masks):
-            self.run_async(x.save, step_canvas_mask_dir / f"{i:02}.png")
-            
-        # torch.save(transforms, self.masks_dir / f"transforms_{step:04}.pt")
-
+        for i, (m1, m2) in enumerate(zip(masks_canvas, masks_palette)):
+            self.run_async(m1.save, self.masks_dir / f"{i:04}_canvas.png")
+            self.run_async(m2.save, self.masks_dir / f"{i:04}_palett.png")
+    
+    def save_transforms_final(self, angle, scale, translation):
+        angle = angle.cpu().numpy().tolist()
+        scale = scale.cpu().numpy().tolist()
+        translation = translation.cpu().numpy().tolist()
+        with open(self.path / 'transforms.json', 'w') as outfile:
+            json.dump({'angle': angle, 'scale': scale, 'translation': translation}, outfile)
+    
     def save_video(self, frames:list):
         skvideo.io.vwrite(self.path/f'{self.key}.mp4', frames, outputdict={
             '-vcodec': 'libx264',
@@ -106,3 +95,33 @@ class CollageSaver:
         for _ in as_completed(self.futures):
             pbar.update()
          
+    ############################################################################
+    # def save_canvas(self, step: int, canvas: torch.Tensor):
+    #     canvas = convert_to_images(canvas.detach().cpu())[0]
+    #     self.run_async(canvas.save, self.canvas_dir / f"{step:04}.jpg")
+
+    # def save_lookup_table(self, step: int, img: torch.Tensor):
+    #     x = Image.fromarray(img.cpu().numpy(), "L")
+    #     self.run_async(x.save, self.masks_dir / f"lut_{step:04}.png")
+
+    # def save_masks(self,
+    #               step: int,
+    #               masks: torch.Tensor,
+    #               mask_pallete: torch.Tensor,
+    #               mask_canvas: torch.Tensor
+    #             ):
+    #     step_img_mask_dir = self.masks_dir / f"img_mask_{step:04}"
+    #     step_img_mask_dir.mkdir(exist_ok=True, parents=True)
+    #     masks = masks_to_pil(masks.detach())
+    #     for i, x in enumerate(masks):
+    #         self.run_async(x.save, step_img_mask_dir / f"{i:02}.png")
+        
+    #     step_canvas_mask_dir = self.masks_dir / f"canvas_mask_{step:04}"
+    #     step_canvas_mask_dir.mkdir(exist_ok=True, parents=True)
+    #     mask_pallete = masks_to_pil(mask_pallete.detach())
+    #     for i, x in enumerate(mask_pallete):
+    #         self.run_async(x.save, step_canvas_mask_dir / f"{i:02}.png")
+            
+        # torch.save(transforms, self.masks_dir / f"transforms_{step:04}.pt")
+
+    

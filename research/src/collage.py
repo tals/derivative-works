@@ -12,31 +12,46 @@ class Collager:
         self.img_size = img_size
         self.n_patches = palette_imgs.shape[0] * patch_per_img
 
-    def makeRandom(self, seed=None):
+    def makeRandom(self, trans_scale=.2, seed=None):
         if seed is not None:
             torch.random.manual_seed(seed)
         n = self.n_patches
-        Z = torch.randn(n, self.latent_size).cuda() # Latent to create the patch
+        Z = torch.randn(n, self.latent_size).cuda()/2 # Latent to create the patch
         angles = torch.randn(2, n).cuda()
-        translations = torch.randn((2, n, 2)).cuda() / 3
+        translations = torch.randn((2, n, 2)).cuda() * trans_scale
         scales = torch.randn(2, n).cuda()
         ordering = torch.randn(n).cuda()
         return Z, angles, translations, scales, ordering
 
-    def __call__(self, Z, angles, translations, scales, ordering, debug=False, return_data=False):
+    def _process_transforms(self, angle_raw, scale_raw, translation_raw):
+        # Assume all input values are in normal distributions.
+        scale = torch.sigmoid(scale_raw) # Scale is [0, 1.0]
+        angle = torch.tanh(angle_raw) * 180 #[-180, 180] range
+        translation = torch.tanh(translation_raw) * self.img_size * .5
+        
+        scale = torch.stack((
+            .25 + .75*scale[0], # Dont go too small or it gets blurry.
+            scale[1] * .75
+        ))
+        
+        return angle, scale, translation
+
+    def __call__(self, Z, angle, translation, scale, ordering, debug=False, return_data=False):
         img_size  = self.img_size
         masks = self.mask_generator(Z) # Create each mask shape.
         masks = F.interpolate(masks, size=(img_size, img_size), mode='bilinear')
         masks = (masks + 1) / 2 # [0, 1] range
         
-        pre_scale = .1 + .9 * torch.sigmoid(scales[0]) # Dont go too small or it gets blurry.
-        
-        M_pre  = create_trans_matrix(img_size, angles[0], translations[0], pre_scale)
+        angle, scale, translation = self._process_transforms(angle, scale, translation)
+    
+        M_pre = create_trans_matrix(
+            img_size, angle[0], translation[0], scale[0]
+        )
         M_post = create_trans_matrix(
             img_size,
-            angles[1]-angles[0],
-            translations[1]-translations[0],
-            (1/pre_scale) * torch.sigmoid(scales[1]) * .75
+            angle[1]-angle[0],
+            translation[1]-translation[0],
+            scale[1] / scale[0]
         )
         
         masks_pre = transform_imgs(M_pre, masks)
@@ -67,7 +82,8 @@ class Collager:
                     write_mask = masks_post[i].round().squeeze().byte()
                     lut *= (1-write_mask)
                     lut += write_mask*overlay*(i+1)
-            return collage, lut, masks, masks_pre
+                data = (lut, masks, masks_pre, masks_post, angle, scale, translation, ordering)
+                return collage, data
 
-        return collage
+        return collage, None
     
