@@ -1,8 +1,8 @@
 <script lang="ts">
-import { query_selector_all } from "svelte/internal";
-
+	import { onMount } from 'svelte';
 	import { EXHIBITS } from "../../data";
 	import { getPreviewImage, getVideoUrl } from "../../url_utils";
+	
 	function onmouseover() {
 		if (!this.hasplayed) {
 			this.src = this.dataset.src
@@ -10,14 +10,48 @@ import { query_selector_all } from "svelte/internal";
 			this.oncanplay = () => this.play()
 		}
 	}
+	function inViewport (el: HTMLElement) {
+		var rect = el.getBoundingClientRect()
+		return (
+			rect.top >= 0 &&
+			rect.left >= 0 &&
+			rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /* or $(window).height() */
+			rect.right <= (window.innerWidth || document.documentElement.clientWidth) /* or $(window).width() */
+		);
+	}
+	onMount(() => {
+		const videos:HTMLVideoElement[] = [...document.querySelectorAll('video')]
+		window.onscroll = () => {			
+			if (window.innerWidth < 768) {
+				for (const vid of videos) {
+					if (inViewport(vid)) { onmouseover.call(vid) }
+				}
+			}
+		}
+		window.onscroll()
+	})
+
 </script>
 
 <style>
-	.exhibit img, .exhibit video {
-		width: 256px;
-		height: 256px;
-		background: white;
+	.exhibit {
+		/* width: 256px; */
+		max-width: calc(50% - 4px);
+		/* width: 100%; */
 		margin: 1px;
+	}
+
+	/* Medium (md) */
+	@media (min-width: 768px) { 
+		.exhibit {
+			width: 256px;
+		}
+	 }
+
+
+	.exhibit img, .exhibit video {
+		background: white;
+		width: 100%;
 	}
 </style>
   

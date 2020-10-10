@@ -5,6 +5,7 @@
   nav {
     font-weight: 300;
     padding: 0 1em;
+    border-bottom:1px solid #e2e8f0;
   }
 </style>
 
