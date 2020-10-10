@@ -64,10 +64,11 @@
 		<a rel=prefetch href="/exhibits/{exhibit.key}" class="m-0 exhibit relative">
 			<figure>
 			 <video 
-			 	 muted autoplay
-				 poster={getPreviewImage(exhibit)}
-				 on:mouseover={onmouseover}
-				 data-src={getVideoUrl(exhibit)}>
+				muted autoplay
+				playsinline webkit-playsinline
+				poster={getPreviewImage(exhibit)}
+				on:mouseover={onmouseover}
+				data-src={getVideoUrl(exhibit)}>
 			 </video>
 		</figure>
 	</a>
