@@ -2,7 +2,6 @@
   import { getPreviewImage, getVideoUrl } from "../../url_utils";
   import * as dt from "../../dataTypes";
   export let exhibit: dt.Collage;
-  import IntersectionObserver from "./_intersectionObserver.svelte";
 
 
   let videoElement: HTMLVideoElement;
