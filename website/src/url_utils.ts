@@ -12,9 +12,12 @@ export function getFinalImage(collage: Collage) {
   return `${CDN_ROOT}/results/${collage.path}/${collage.key}.jpg`;
 }
 
-export function getPreviewImage(collage: Collage) {
-  // return `${CDN_ROOT}/results/${collage.path}/${collage.key}_small.jpg`;
+export function getFirstFrame(collage: Collage) {
   return `${CDN_ROOT}/results/${collage.path}/${collage.key}_frame0.jpg`;
+}
+
+export function getLastFrame(collage: Collage) {
+  return `${CDN_ROOT}/results/${collage.path}/${collage.key}_small.jpg`;
 }
 
 export function getMaskCanvasSpace(collage: Collage, piece: number) {
@@ -29,8 +32,8 @@ export function getLutUrl(collage: Collage) {
   return `${CDN_ROOT}/results/${collage.path}/lut_${collage.key}.png`;
 }
 
-export function getVideoUrl(collage: Collage) {
-  return `${CDN_ROOT}/results/${collage.path}/${collage.key}_fast.mp4`;
+export function getVideoUrl(collage: Collage, small=false) {
+  return `${CDN_ROOT}/results/${collage.path}/${collage.key}_fast${small ? '_small' : ''}.mp4`;
 }
 
 export function getArtbreederUrl(palette_key: string) {

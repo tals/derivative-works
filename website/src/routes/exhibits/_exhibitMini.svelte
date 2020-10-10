@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getPreviewImage, getVideoUrl } from "../../url_utils";
+  import { getFirstFrame, getLastFrame, getVideoUrl } from "../../url_utils";
   import * as dt from "../../dataTypes";
   export let exhibit: dt.Collage;
 
@@ -14,10 +14,23 @@
   $: autoplay = innerWidth < 768;
 
   function playVideo() {
-		if (!hasPlayed) {
-      hasPlayed = true
-			videoElement.src = getVideoUrl(exhibit);
-			videoElement.oncanplay = () => videoElement.play()
+		if (!videoElement.hasPlayed) { // hasplayed variable doesnt work.
+      videoElement.hasPlayed = true
+			videoElement.src = getVideoUrl(exhibit, autoplay)
+      videoElement.oncanplay = () => {
+        // Update poster to the last frame so that we can remove video when done.
+        videoElement.poster = getLastFrame(exhibit)
+        videoElement.play()
+      }
+      if (autoplay) {
+        videoElement.onended = () => {
+          // Delete video content when video is done to decrease memory usage.
+          // https://stackoverflow.com/a/28060352/2175411
+          videoElement.pause()
+          videoElement.removeAttribute('src') // empty source
+          videoElement.load()
+        }
+      }
 		}
   }
 
@@ -53,9 +66,7 @@
 
 <style>
   .exhibit {
-    /* width: 256px; */
     max-width: calc(50% - 4px);
-    /* width: 100%; */
     margin: 1px;
   }
 
@@ -87,7 +98,7 @@
       autoplay
       playsinline
       webkit-playsinline
-      poster={getPreviewImage(exhibit)}
+      poster={getFirstFrame(exhibit)}
       bind:this={videoElement}
       on:mouseover={playVideo} />
   </figure>
