@@ -109,7 +109,7 @@
 
         playsinline
         webkit-playsinline
-        out:fade
+        out:fade|local
         poster={getFirstFrame(exhibit)}
         bind:this={videoElement}
         />
