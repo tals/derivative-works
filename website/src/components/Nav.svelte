@@ -9,7 +9,7 @@
   }
 </style>
 
-<nav class="bg-white text-black fixed w-full z-10 flex items-center text-2xl justify-between">
+<nav class="bg-white text-black fixed w-full z-20 flex items-center text-2xl justify-between">
   <a href="/exhibits">
     <div class=" p-2 font-normal select-none">Derivative Works</div>
   </a>
