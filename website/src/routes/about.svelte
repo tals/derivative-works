@@ -73,7 +73,7 @@
     collage collage parameters
 
 
-    To our surprise, this simple technique lead to a variety of textures and
+    This simple technique lead to a variety of textures and
     compositions.
 
     The videos on the website show the actual optimization.
