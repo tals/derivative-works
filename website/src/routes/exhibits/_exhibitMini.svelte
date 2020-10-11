@@ -21,7 +21,7 @@
 
 </script>
 
-<a rel="prefetch" href="/exhibits/{exhibit.key}" class="m-px exhibit relative w-96">
+<a rel="prefetch" href="/exhibits/{exhibit.key}" class="m-px exhibit relative w-84">
   <figure>
     <video
       class="w-full bg-white"
