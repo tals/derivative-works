@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-  import { EXHIBITS } from "../../../data";
+  import { EXHIBITS, PATCHES_PER_PALETTE } from "../../../data";
   export async function preload({ params }) {
     const exhibit = EXHIBITS.find((x) => x.key === params.slug);
     if (!exhibit) {
@@ -13,7 +13,6 @@
 </script>
 
 <script lang="ts">
-  import { goto } from '@sapper/app';
   import * as urls from "../../../url_utils";
   import * as dt from "../../../dataTypes";
   import clamp from "lodash/clamp";
@@ -30,6 +29,7 @@
   let lutSize = { width: 0, height: 0 };
 
   function mouseOut() {
+    console.log("mouse out!")
     currentMask = -1;
     currentPiece = -1;
   }
@@ -56,95 +56,76 @@
   let video: HTMLVideoElement;
   let playVideo = true;
 
-
-
   // reset video when switching exhibits
   $: if (exhibit) {
     playVideo = true;
   }
-
-  function handleKeydown(e: KeyboardEvent) {
-    if (e.key === "ArrowLeft" && prev) {
-      goto(`/exhibits/${prev.key}`)
-    }
-    if (e.key === "ArrowRight" && next) {
-      goto(`/exhibits/${next.key}`)
-    }
-  }
 </script>
 
-<style>
-  .grid-container {
-    display: grid;
-    grid-template-columns: 80px 1fr 80px;
-    grid-template-rows: max-content max-content;
-    gap: 0px 0px;
-    grid-template-areas:
-      "left main right"
-      "left part right";
-  }
-  .left {
-    grid-area: left;
-  }
-  .right {
-    grid-area: right;
-  }
-  .main {
-    grid-area: main;
-  }
-  .part {
-    grid-area: part;
-  }
-</style>
-
-<svelte:window on:keydown={handleKeydown}/>
-<div class="text-white">
-  <ImageData
-    bind:imageDataCtx={lutCtx}
-    bind:size={lutSize}
-    src={urls.getLutUrl(exhibit)} />
-  <div class="grid-container items-center items-center justify-items-center">
-    <!-- Nav -->
-    {#if prev}
-      <a
-        class="left material-icons md-dark md-48 p-4 opacity-75 duration-300 hover:opacity-100"
-        href="/exhibits/{prev.key}">arrow_back</a>
-    {/if}
-    {#if next}
-      <a
-        class="right material-icons md-dark md-48 p-4 opacity-75 duration-300 hover:opacity-100"
-        href="/exhibits/{next.key}">arrow_forward</a>
-    {/if}
-    <!-- Main image -->
-    <div class="main">
-    <!-- <div class="font-medium italic text-4xl font-serif text-center">"{exhibit.name}"</div> -->
-    <div class="relative m-4 h-128 w-128 bg-white">
-      {#if playVideo}
-        <video on:play={() => video.playbackRate = 1} class="absolute" out:fade|local on:ended={() => playVideo = false}  muted={true} bind:this={video} src={urls.getVideoUrl(exhibit)} autoplay/>
-      {:else}
+<ImageData
+  bind:imageDataCtx={lutCtx}
+  bind:size={lutSize}
+  src={urls.getLutUrl(exhibit)} />
+<div class="flex justify-center">
+  <div class="flex flex-col justify-center items-center">
+  <!-- Nav -->
+  <div class="flex justify-around w-96">
+    <div>{#if prev}
+    <a
+    class="left material-icons md-dark md-48 p-4 opacity-75 duration-300 hover:opacity-100"
+    href="/exhibits/{prev.key}">arrow_back</a>
+    {/if}</div>
+    <div>{#if next}
+    <a
+    class="right material-icons md-dark md-48 p-4 opacity-75 duration-300 hover:opacity-100"
+    href="/exhibits/{next.key}">arrow_forward</a>
+    {/if}</div>
+  </div>
+  <!-- Nav -->
+  <!-- Main image -->
+  <div class="relative h-96 w-96 bg-white">
+    {#if playVideo}
+      <video
+        on:play={() => (video.playbackRate = 1)}
+        class="absolute"
+        out:fade|local
+        on:ended={() => (playVideo = false)}
+        muted={true}
+        playsinline
+        bind:this={video}
+        src={urls.getVideoUrl(exhibit)}
+        autoplay />
+    {:else}
       <img
-        class="rounded h-full"
+        class="rounded"
+        style="touch-action: manipulation;"
         in:fade
         src={urls.getFinalImage(exhibit)}
         on:mousemove={mouseMove}
-        on:mouseout={mouseOut} />
+        on:mouseout={mouseOut}
+        />
       {#if currentPiece !== -1}
         <img
-          in:fade={{duration: 200}}
-          out:fade|local={{duration: 200}}
+          in:fade={{ duration: 200 }}
           class="rounded absolute inset-0 pointer-events-none"
           style="mix-blend-mode: multiply;"
           src={urls.getMaskCanvasSpace(exhibit, currentMask)}
-          on:mousemove={mouseMove} />
+           />
       {/if}
     {/if}
-    </div>
   </div>
-    <!-- Source Images -->
-    <div class="part flex flex-col items-center">
-  <h1 class="text-2xl text-black p-4">Source Material</h1>
-  <div class="flex flex-wrap  justify-center">
-    {#each exhibit.palette_keys as p, i}
+
+  <!-- Attempt to preload images. Seems broken for some reason (cache headers?) -->
+  {#each Array(exhibit.palette_keys.length * PATCHES_PER_PALETTE) as _, i}
+    <img src={urls.getMaskPieceSpace(exhibit, i)} hidden />
+    <img src={urls.getMaskCanvasSpace(exhibit, i)} hidden />
+
+  {/each}
+  <!-- Source Images -->
+  <div class="parts flex flex-col items-center">
+    <h1 class="text-2xl text-black p-4">Source Material</h1>
+    <div class="flex flex-wrap  justify-center">
+      {#each exhibit.palette_keys as p, i}
         <a
           href={urls.getArtbreederUrl(p)}
           target=_blank
@@ -161,5 +142,5 @@
       {/each}
     </div>
   </div>
-  </div>
+</div>
 </div>

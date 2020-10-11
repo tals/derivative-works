@@ -1,5 +1,5 @@
 import {Collage} from "./dataTypes";
-
+export const PATCHES_PER_PALETTE = 20;
 export const EXHIBITS: Collage[] = [
   {
     'key': 'dzdsdu',
@@ -15,7 +15,7 @@ export const EXHIBITS: Collage[] = [
  'ce0a5925e69ff3112fa7',
  '9d871d6be1d65a11c59a',
  '285cf1ce669edeab9041']},
- 
+
 {'key': 'idzkjw',
 'path': 'batch-3/2020-10-08-06-42-idzkjw',
 'palette_keys': ['afc622a41966e3482a17',

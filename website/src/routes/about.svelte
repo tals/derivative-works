@@ -19,7 +19,7 @@
     <p />
     <div>
       <span>
-        We wanted to see how a simple "agent" (vanilla Adam optimizer) will cut
+        We wanted to see how a simple "agent" will cut
         up and match textures and shapes when trying to achieve its goal:
       </span><span class="font-semibold">creating a face</span>
     </div>
@@ -48,7 +48,7 @@
     <div>
       We happened to have had a pretty decent patch generator (vanilla DCGAN)
       from
-      <a href="https://joelsimon.net/forms-of-life.html">a previous project</a>,
+      <a href="https://joelsimon.net/forms-of-life.html">a previous project</a>  of Joel's,
       researching optimization techniques on
       <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Game of
         Life</a>.

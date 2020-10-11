@@ -1,5 +1,6 @@
-import { CDN_ROOT } from "./config";
 import {Collage} from "./dataTypes"
+
+export const CDN_ROOT = 'https://derivative-works.b-cdn.net'
 
 function pad(x: number, leading: number) {
   return x.toString().padStart(leading, "0");
