@@ -17,7 +17,7 @@
   import * as dt from "../../../dataTypes";
   import clamp from "lodash/clamp";
   import ImageData from "../../../components/ImageData.svelte";
-  import { fade } from "svelte/transition";
+  import { fade, fly } from "svelte/transition";
 
   export let exhibit: dt.Collage;
   export let prev: dt.Collage;
@@ -81,7 +81,6 @@
     href="/exhibits/{next.key}">arrow_forward</a>
     {/if}</div>
   </div>
-  <!-- Nav -->
   <!-- Main image -->
   <div class="relative h-96 w-96 bg-white">
     {#if playVideo}
@@ -112,6 +111,12 @@
           src={urls.getMaskCanvasSpace(exhibit, currentMask)}
            />
       {/if}
+    {/if}
+  </div>
+  <div class="instructions h-8 text-black">
+    {#if !playVideo}
+    <div class="sm:hidden" in:fly={{y: -10, duration: 500}}>touch me</div>
+    <div class="hidden sm:block" in:fly={{y: -10, duration: 500}}>hover over me</div>
     {/if}
   </div>
 
