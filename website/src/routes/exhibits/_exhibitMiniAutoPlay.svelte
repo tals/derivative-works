@@ -84,11 +84,7 @@
   });
 
   let clientWidth: number;
-  $: console.log("clientWidth", clientWidth)
 </script>
-
-<style>
-</style>
 
 <svelte:window
   on:scroll={onScroll}
@@ -97,7 +93,7 @@
   bind:innerWidth
   bind:innerHeight />
 <div
-  class="relative w-full bg-red-400 m-1 h-96"
+  class="relative w-full m-1 h-96"
   bind:clientWidth
   style="height: {clientWidth}px;"
   bind:this={containerElement}>
@@ -106,17 +102,14 @@
       <video
         class="absolute inset-0 w-full z-10"
         muted
-
         playsinline
         webkit-playsinline
         out:fade|local
         poster={getFirstFrame(exhibit)}
         bind:this={videoElement}
         />
-    {:else if videoEnded}
     {/if}
 
     <img class="absolute inset-0 z-0" src={getFinalImage(exhibit)}/>
-
   </a>
 </div>
