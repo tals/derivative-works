@@ -15,7 +15,7 @@
     HACK: the inenrWidth takes a tick to show up, so dont render until we know if we're mobile.
     If we're being SSR'd, just render it as is to avoid breaking `sapper export`
     -->
-  {#if innerWidth || !process.env.browser}
+  {#if innerWidth || !process.browser}
     {#each EXHIBITS as exhibit}
       {#if isMobile}
         <ExhibitMiniAutoPlay {exhibit} />
