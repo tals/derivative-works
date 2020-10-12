@@ -1,0 +1,11 @@
+# media
+Pillow==6.0.0
+sk-video==1.1.10
+
+# torch
+torch==1.6.0
+torchvision==0.7.0
+kornia==0.4.0
+
+# misc
+tqdm==4.45.0
