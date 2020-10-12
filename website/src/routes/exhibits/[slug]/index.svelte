@@ -114,7 +114,7 @@
     {/if}
   </div>
   <div class="instructions h-8 text-black">
-    {#if !playVideo}
+    {#if !playVideo && exhibit.key !== "hcadfm"}
     <div class="sm:hidden" in:fly={{y: -10, duration: 600, delay: 200}}>touch me</div>
     <div class="hidden sm:block" in:fly={{y: -10, duration: 600, delay: 200}}>hover over me</div>
     {/if}
