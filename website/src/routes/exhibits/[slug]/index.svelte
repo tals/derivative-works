@@ -82,7 +82,7 @@
     {/if}</div>
   </div>
   <!-- Main image -->
-  <div class="relative h-96 w-96 bg-white">
+  <div class="relative h-96 w-96 md:w-128 md:h-128 lg:w-164 bg-white">
     {#if playVideo}
       <video
         on:play={() => (video.playbackRate = 1)}

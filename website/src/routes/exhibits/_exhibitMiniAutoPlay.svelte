@@ -93,7 +93,7 @@
   bind:innerWidth
   bind:innerHeight />
 <div
-  class="relative w-full m-1 h-96"
+  class="relative w-full m-1 mx-2 h-96"
   bind:clientWidth
   style="height: {clientWidth}px;"
   bind:this={containerElement}>
