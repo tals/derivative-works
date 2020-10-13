@@ -26,4 +26,4 @@ Located in `/website`. See readme
 
 ## Special Thanks
 - [@jacobgil](https://github.com/jacobgil/) for his [dlib pytorch port](https://github.com/jacobgil/dlib_facedetector_pytorch)
-- [reiinakano](https://github.com/reiinakano) for [Neural Painters](https://github.com/reiinakano/neural-painters), which was helpful during our research
+- [@reiinakano](https://github.com/reiinakano) for [Neural Painters](https://github.com/reiinakano/neural-painters), which was helpful during our research
