@@ -13,9 +13,15 @@
   let innerWidth: number;
   let innerHeight: number;
 
+  // there's some visibility shennanigans here:
+  // loading a bunch of videos on mobile safari made it cry (it seems fine on dekstop chrome), so some hacks were needed.
+  // We keep the video files without a src, and only load them when they are fully visible.
+  // (TODO: maybe start preloading when they are partially visible? tried it and it was kinda buggy)
+  // - if playback completed, the video is removed entirely and only the final image is shown.
+  // - if we scrolled away while the video was playing, we unload the video tag's content.
   let showVideo = true;
   let videoEnded = false;
-  let videoInited;
+  let videoInited = false;
 
   function log(...args) {
     console.log("[autoplay]", ...args);
