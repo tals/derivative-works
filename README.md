@@ -20,8 +20,13 @@ All of the reference images are in the public domain, created in Artbreeder usin
 The primary difference between this method and vanilla inversion is the input medium: instead of optimizing pixels directly, we optimize parameters. This simple technique lead to a variety of textures and compositions and the videos show the actual optimizations.
 
 ## Repo
-### Website (svelte + typescript + sapper + tailwind)
-Located in `/website`. See readme
+### /website
+The website listed above. Uses svelte + typescript + sapper + tailwind
+
+### /research
+Contains all notebooks to create your own collages.
+
+TODO: Make it colab compatible
 
 
 ## Special Thanks
