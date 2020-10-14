@@ -1,16 +1,18 @@
 import os, sys
-sys.path.append('/home/joel/Repos/dlib_facedetector_pytorch')
-from dlib_torch_converter import get_model
+import dlib_torch_converter
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from PIL import Image
 import torchvision.transforms as transforms
+from pathlib import Path
+
+MODEL_PATH = Path(dlib_torch_converter.__file__).parent / 'face.xml'
 
 class DlibFaceLoss:
     def __init__(self, filter_index=1, target_image_path=None):
         self.filter_index = filter_index
-        self.dlib_model = get_model('/home/joel/Repos/dlib_facedetector_pytorch/face.xml').eval().cuda()
+        self.dlib_model = dlib_torch_converter.get_model(str(MODEL_PATH)).eval().cuda()
         self.model = nn.Sequential(*[self.dlib_model._modules[i] \
                                    for i in list(self.dlib_model._modules.keys())[:-2]])
         self.model.eval()
@@ -25,9 +27,9 @@ class DlibFaceLoss:
         # [0, 1] input range
         self.model.zero_grad()
         img_tensors = F.interpolate(img_tensors, size=(128, 128), mode='bilinear')
-                
+
         out = self.model(img_tensors)
-        size = out.size(2)        
+        size = out.size(2)
         if self.target_activations is not None:
             # loss = torch.dist(out[0, :5], self.target_activations[0, :5])
             loss = torch.dist(out, self.target_activations)
@@ -68,7 +70,7 @@ class IdentityLoss:
                 pass
         print(len(self.target_img_embeddings), 'images found with faces.')
         self.target_emb = torch.stack(self.target_img_embeddings).squeeze().mean(axis=0).cuda()
-    
+
     def _get_emb(self, img_tensors):
         self.facenet.zero_grad()
         self.facenet.eval()
