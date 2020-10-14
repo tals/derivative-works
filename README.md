@@ -1,5 +1,6 @@
 source code for https://derivative.works
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/tals/derivative-work/blob/master/research/make_collage.ipynb)
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/tals/derivative-works/blob/main/research/make_collage.ipynb)
 
 
 ## About
