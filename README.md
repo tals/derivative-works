@@ -1,7 +1,9 @@
-source code for https://derivative.works 
+source code for https://derivative.works
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/tals/derivative-work/blob/master/research/make_collage.ipynb)
+
 
 ## About
-Derivative-Works is an experiment in using machine learning to create image collages. 
+Derivative-Works is an experiment in using machine learning to create image collages.
 
 The algorithm cuts out shapes from images and rearranges them to create a face.
 
