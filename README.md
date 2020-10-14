@@ -30,5 +30,5 @@ TODO: Make it colab compatible
 
 
 ## Special Thanks
-- [@jacobgil](https://github.com/jacobgil/) for his [dlib pytorch port](https://github.com/jacobgil/dlib_facedetector_pytorch)
+- [@jacobgil](https://github.com/jacobgil/) for his [dlib port + feature inversion repo](https://github.com/jacobgil/dlib_facedetector_pytorch) which made things work :)
 - [@reiinakano](https://github.com/reiinakano) for [Neural Painters](https://github.com/reiinakano/neural-painters), which was helpful during our research
