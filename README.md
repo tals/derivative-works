@@ -27,9 +27,9 @@ The primary difference between this method and vanilla inversion is the input me
 The website listed above. Uses svelte + typescript + sapper + tailwind
 
 ### /research
-Contains all notebooks to create your own collages.
+See make_collage.ipynb to make your own
 
-TODO: Make it colab compatible
+Exporting the data for the site is a little buggy 😇
 
 
 ## Special Thanks
