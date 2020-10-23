@@ -1,0 +1,27 @@
+# This is a basic workflow to help you get started with Actions
+
+name: web
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ "main" ]
+jobs:
+  publish:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+      - run: cd website && npm install && npm run export
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          publish_dir: website/__sapper__/export
+          publish_branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
