@@ -21,19 +21,19 @@ class CollageSaver:
         prefix = datetime.utcnow().strftime("%Y-%m-%d-%H-%M") + f"-{self.key}"
         self.path = Path(f"./results/{prefix}")
         self.path.mkdir(exist_ok=False, parents=True)
-        
+
         self.palette_dir = self.path / "palette"
         self.palette_dir.mkdir(exist_ok=True)
 
         self.masks_dir = self.path / "masks"
         self.masks_dir.mkdir(exist_ok=True)
-        
+
         # self.canvas_dir = self.path / "canvas"
         # self.canvas_dir.mkdir(exist_ok=True)
 
         # self.transform_dir = self.path / "transform"
         # self.transform_dir.mkdir(exist_ok=True)
-        
+
         self.futures = set()
         self.executor = ThreadPoolExecutor(16)
         skvideo.setFFmpegPath(ffmpeg_path)
@@ -47,7 +47,7 @@ class CollageSaver:
         imgs = convert_to_images(palette_imgs.cpu())
         for i,x in enumerate(imgs):
             self.run_async(x.save, self.palette_dir / f"{i:04}.jpg")
-    
+
     def save(self, img, data, final=False):
         lut, masks, masks_pre, masks_post, angle, scale, translation, ordering = data
         if final:
@@ -66,35 +66,35 @@ class CollageSaver:
     def save_lookup_table_final(self, img: torch.Tensor):
         x = Image.fromarray(img.cpu().numpy(), "L")
         self.run_async(x.save, self.path / f"lut_{self.key}.png")
-    
+
     def save_masks_final(self, masks_palette, masks_canvas):
         masks_canvas = masks_to_pil(masks_canvas.detach())
         masks_palette = masks_to_pil(masks_palette.detach())
-        
+
         for i, (m1, m2) in enumerate(zip(masks_canvas, masks_palette)):
             self.run_async(m1.save, self.masks_dir / f"{i:04}_canvas.png")
             self.run_async(m2.save, self.masks_dir / f"{i:04}_palett.png")
-    
+
     def save_transforms_final(self, angle, scale, translation):
         angle = angle.cpu().numpy().tolist()
         scale = scale.cpu().numpy().tolist()
         translation = translation.cpu().numpy().tolist()
         with open(self.path / 'transforms.json', 'w') as outfile:
             json.dump({'angle': angle, 'scale': scale, 'translation': translation}, outfile)
-    
+
     def save_video(self, frames:list):
         skvideo.io.vwrite(self.path/f'{self.key}.mp4', frames, outputdict={
             '-vcodec': 'libx264',
             '-pix_fmt': 'yuv420p',
             '-crf': '25',
-            '-r':'30',
+            '-r':'60',
         })
 
     def join(self):
         pbar = tqdm(total=len(self.futures))
         for _ in as_completed(self.futures):
             pbar.update()
-         
+
     ############################################################################
     # def save_canvas(self, step: int, canvas: torch.Tensor):
     #     canvas = convert_to_images(canvas.detach().cpu())[0]
@@ -115,13 +115,12 @@ class CollageSaver:
     #     masks = masks_to_pil(masks.detach())
     #     for i, x in enumerate(masks):
     #         self.run_async(x.save, step_img_mask_dir / f"{i:02}.png")
-        
+
     #     step_canvas_mask_dir = self.masks_dir / f"canvas_mask_{step:04}"
     #     step_canvas_mask_dir.mkdir(exist_ok=True, parents=True)
     #     mask_pallete = masks_to_pil(mask_pallete.detach())
     #     for i, x in enumerate(mask_pallete):
     #         self.run_async(x.save, step_canvas_mask_dir / f"{i:02}.png")
-            
+
         # torch.save(transforms, self.masks_dir / f"transforms_{step:04}.pt")
 
-    

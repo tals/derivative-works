@@ -60,7 +60,7 @@ class RandomRotate(nn.Module):
     center[..., 0] = img.shape[3] / 2  # x
     center[..., 1] = img.shape[2] / 2  # y
     # define the scale factor
-    scale = torch.ones(b, device=img.device)
+    scale = torch.ones(b, 2, device=img.device)
     M = kornia.get_rotation_matrix2d(center, angle, scale)
     img_warped = kornia.warp_affine(img, M, dsize=(h, w))
     return img_warped
