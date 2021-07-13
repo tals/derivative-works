@@ -103,10 +103,16 @@
   bind:clientWidth
   style="height: {clientWidth}px;"
   bind:this={containerElement}>
-  <a rel="prefetch" href="/exhibits/{exhibit.key}" class="m-px w-full">
+  <a rel="prefetch" href="/exhibits/{exhibit.key}" class="m-px w-full bg-blue-500">
+    <div class="absolute inset-0 bg-cover" style="background-image: url({getFirstFrame(exhibit)});"
+    class:opacity-0={videoEnded}
+    ></div>
+    <div class="absolute inset-0 bg-cover transition-opacity duration-500" style="background-image: url({getFinalImage(exhibit)});"
+    class:opacity-0={!videoEnded}
+    ></div>
     {#if showVideo}
       <video
-        class="absolute inset-0 w-full z-10"
+        class="absolute inset-0 w-full h-full z-10"
         muted
         playsinline
         webkit-playsinline
@@ -116,6 +122,5 @@
         />
     {/if}
 
-    <img class="absolute inset-0 z-0" src={getFinalImage(exhibit)}/>
   </a>
 </div>
